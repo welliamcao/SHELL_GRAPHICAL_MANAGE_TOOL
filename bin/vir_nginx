@@ -1,0 +1,31 @@
+#!/bin/bash
+conf_service_nginxvir(){
+mkdir -p /usr/local/nginx/vhost/
+cp -raf ./conf/nginx.conf /usr/local/nginx/conf/nginx.conf >/dev/null 2>&1
+cat > /usr/local/nginx/vhost/${vhost_name}.conf <<END
+server
+  {
+    listen       80;
+    server_name  ${vhost_name};
+    index index.html index.htm index.php;
+    root  ${vhost_path};
+    location ~ .*\.(php|php5)?$
+    {
+      fastcgi_pass   127.0.0.1:9000;
+      fastcgi_index index.php;
+      include fastcgi.conf;
+    }
+
+location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$
+    {
+      expires      30d;
+    }
+
+    location ~ .*\.(js|css)?$
+    {
+      expires      1h;
+    }
+    error_page 404 /404.html;
+      }
+END
+}

@@ -1,0 +1,11 @@
+#!/bin/bash
+inst_lnmp_source_mcrypt(){
+cd ${source_dir}
+tar zxvf mcrypt-2.6.8.tar.gz >/dev/null 2>&1
+cd mcrypt-2.6.8/
+/sbin/ldconfig >/dev/null 2>&1
+./configure >/dev/null 2>&1
+make >/dev/null 2>&1
+make install >/dev/null 2>&1
+cd ../
+}

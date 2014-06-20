@@ -1,0 +1,10 @@
+#!/bin/bash
+inst_lnmp_source_libiconv(){
+cd ${source_dir}
+tar zxvf libiconv-1.13.1.tar.gz >/dev/null 2>&1
+cd libiconv-1.13.1/
+./configure --prefix=/usr/local >/dev/null 2>&1
+make  >/dev/null 2>&1
+make install >/dev/null 2>&1
+cd ../
+}

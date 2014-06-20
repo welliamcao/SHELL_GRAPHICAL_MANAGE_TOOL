@@ -1,0 +1,15 @@
+#!/bin/bash
+inst_lnmp_source_libmcrypt(){
+cd ${source_dir}
+tar zxvf libmcrypt-2.5.8.tar.gz >/dev/null 2>&1
+cd libmcrypt-2.5.8/
+./configure >/dev/null 2>&1
+make >/dev/null 2>&1
+make install >/dev/null 2>&1
+/sbin/ldconfig >/dev/null 2>&1
+cd libltdl/ 
+./configure --enable-ltdl-install >/dev/null 2>&1
+make >/dev/null 2>&1
+make install >/dev/null 2>&1
+cd ../../
+}

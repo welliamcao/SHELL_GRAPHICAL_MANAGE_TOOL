@@ -1,0 +1,30 @@
+#!/bin/bash
+conf_phpext_opcache(){
+cd ${source_dir}
+if [[ ! -f zendopcache-7.0.3.tgz ]]
+ then
+    wget -q -P ${source_dir}  http://pecl.php.net/get/zendopcache-7.0.3.tgz
+fi
+if [[  -f zendopcache-7.0.3.tgz ]]
+ then
+ tar -xzvf zendopcache-7.0.3.tgz >/dev/null 2>&1
+ cd zendopcache-7.0.3 
+ /usr/local/php/bin/phpize  >/dev/null 2>&1
+ ./configure --with-php-config=/usr/local/php/bin/php-config >/dev/null 2>&1
+ make >/dev/null 2>&1
+ make install >/dev/null 2>&1
+cat >> /usr/local/php/etc/php.ini << END
+[Zend Opcache]
+zend_extension = /usr/local/php/lib/php/extensions/no-debug-non-zts-20090626/opcache.so
+opcache.memory_consumption=64
+opcache.interned_strings_buffer=8
+opcache.max_accelerated_files=4000
+opcache.force_restart_timeout=180
+opcache.revalidate_freq=60
+opcache.fast_shutdown=1
+opcache.enable_cli=1
+END
+else
+    dialog --clear --backtitle "${backtitle}" --title "${title}" --msgbox "${rs} is not exist.Maybe download failed.check your network." 10 50
+fi
+}

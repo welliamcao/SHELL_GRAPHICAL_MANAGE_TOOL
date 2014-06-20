@@ -1,0 +1,36 @@
+#!/bin/bash
+inst_lnmp_mysql(){
+cd ${source_dir}
+mkdir -p /usr/local/mysql    
+mkdir -p /usr/local/mysql/data
+groupadd mysql >/dev/null 2>&1
+useradd -r -g mysql mysql >/dev/null 2>&1
+tar -zxv -f mysql-5.5.29.tar.gz   >/dev/null 2>&1
+cd mysql-5.5.29
+yum install -y cmake >/dev/null 2>&1
+cmake \
+-DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
+-DMYSQL_UNIX_ADDR=/usr/local/mysql/mysql.sock \
+-DDEFAULT_CHARSET=utf8 \
+-DDEFAULT_COLLATION=utf8_general_ci \
+-DWITH_MYISAM_STORAGE_ENGINE=1 \
+-DWITH_INNOBASE_STORAGE_ENGINE=1 \
+-DWITH_ARCHIVE_STORAGE_ENGINE=1 \
+-DWITH_BLACKHOLE_STORAGE_ENGINE=1 \
+-DWITH_MEMORY_STORAGE_ENGINE=1 \
+-DWITH_READLINE=1 \
+-DENABLED_LOCAL_INFILE=1 \
+-DMYSQL_DATADIR=/usr/local/mysql/data \
+-DMYSQL_USER=mysql \
+-DMYSQL_TCP_PORT=3306  >/dev/null 2>&1
+make >/dev/null 2>&1
+make install  >/dev/null 2>&1
+cp -raf support-files/my-medium.cnf /etc/my.cnf >/dev/null 2>&1
+cp -raf support-files/mysql.server /etc/init.d/mysqld  >/dev/null 2>&1
+chmod u+x /etc/init.d/mysqld >/dev/null 2>&1
+chown -R mysql:mysql /usr/local/mysql/ >/dev/null 2>&1
+bash ./scripts/mysql_install_db --user=mysql --datadir=/usr/local/mysql/data --basedir=/usr/local/mysql >/dev/null 2>&1
+service mysqld start >/dev/null 2>&1
+/usr/local/mysql/bin/mysql -uroot  mysql -e "UPDATE user SET Password=PASSWORD('123456') WHERE user='root';FLUSH PRIVILEGES;"
+kill -9 `ps aux|grep mysql|grep -v grep|awk '{print$2}'`
+}

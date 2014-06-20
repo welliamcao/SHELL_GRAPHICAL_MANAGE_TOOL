@@ -1,0 +1,21 @@
+#!/bin/bash
+conf_phpext_mongo(){
+cd ${source_dir}
+if [[ ! -f mongo-1.5.2.tgz ]]
+ then
+    wget -q -P ${source_dir} http://pecl.php.net/get/mongo-1.5.2.tgz
+fi
+if [[ -f mongo-1.5.2.tgz  ]];then
+tar -xzvf mongo-1.5.2.tgz >/dev/null 2>&1
+cd mongo-1.5.2
+/usr/local/php/bin/phpize >/dev/null 2>&1
+./configure --with-php-config=/usr/local/php/bin/php-config >/dev/null 2>&1
+make >/dev/null 2>&1
+make install >/dev/null 2>&1
+cat >> /usr/local/php/etc/php.ini << END
+extension = mongo.so
+END
+else
+   dialog --clear --backtitle "${backtitle}" --title "${title}" --msgbox "${rs} is not exist.check your network." 10 50
+fi
+}

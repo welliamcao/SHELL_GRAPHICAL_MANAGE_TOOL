@@ -1,0 +1,22 @@
+#!/bin/bash
+conf_phpext_redis(){
+cd ${source_dir}
+if [[ ! -f redis-2.2.4.tgz ]]
+ then
+    wget -q -P ${source_dir} http://pecl.php.net/get/redis-2.2.4.tgz
+fi
+if [[ -f redis-2.2.4.tgz  ]];then
+tar -xzvf redis-2.2.4.tgz >/dev/null 2>&1
+cd redis-2.2.4 
+/usr/local/php/bin/phpize >/dev/null 2>&1
+./configure --with-php-config=/usr/local/php/bin/php-config >/dev/null 2>&1
+make >/dev/null 2>&1
+make install >/dev/null 2>&1
+
+cat >> /usr/local/php/etc/php.ini << END
+extension = redis.so
+END
+else
+   dialog --clear --backtitle "${backtitle}" --title "${title}" --msgbox "${rs}  download error." 10 50
+fi
+}

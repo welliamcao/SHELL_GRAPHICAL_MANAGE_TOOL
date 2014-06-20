@@ -1,0 +1,92 @@
+#!/bin/bash
+inst_lnmp_nginx(){
+cd ${source_dir}
+tar -xzvf pcre-8.33.tar.gz >/dev/null 2>&1
+cd pcre-8.33 >/dev/null 2>&1
+./configure >/dev/null 2>&1
+make >/dev/null 2>&1
+make install >/dev/null 2>&1
+cd ../
+tar -xzvf nginx-1.4.7.tar.gz  >/dev/null 2>&1
+groupadd www >/dev/null 2>&1
+useradd www -s /sbin/nologin   -g www >/dev/null 2>&1
+cd nginx-1.4.7 
+./configure --user=www --group=www --prefix=/usr/local/nginx --with-http_stub_status_module  --with-http_ssl_module >/dev/null 2>&1
+make >/dev/null 2>&1
+make install >/dev/null 2>&1
+if [[ $( getconf LONG_BIT) -eq 64 ]]
+    then 
+       ln -s /usr/local/lib/libpcre.so.1 /usr/lib64/
+    else
+       ln -s /usr/local/lib/libpcre.so.1 /usr/lib/
+fi
+mkdir -p /usr/local/nginx/vhost/
+#cp -raf ./conf/nginx.conf /usr/local/nginx/conf/nginx.conf
+cat > /usr/local/nginx/conf/nginx.conf <<END
+user  www www;
+worker_processes 1;
+error_log  /usr/local/nginx/logs/nginx_error.log  crit;
+pid        /usr/local/nginx/nginx.pid;
+worker_rlimit_nofile 65535;
+events
+{
+        use epoll;
+        worker_connections 65535;
+}
+http
+{
+        include       mime.types;
+        default_type  application/octet-stream;
+        server_tokens off;
+        open_file_cache max=65535 inactive=20s;
+        open_file_cache_valid 30s;
+        open_file_cache_min_uses 1;
+        server_names_hash_bucket_size 128;
+        client_header_buffer_size 32k;
+        large_client_header_buffers 4 64k;
+        client_max_body_size 8m;
+        sendfile on;
+        tcp_nopush  on;
+        keepalive_timeout 60;
+        tcp_nodelay on;
+        gzip on;
+        gzip_min_length  1k;
+        gzip_buffers     4 16k;
+        gzip_http_version 1.0;
+        gzip_comp_level 2;
+        gzip_types       text/plain application/x-javascript text/css application/xml;
+        gzip_vary on;
+    
+     server {
+         listen    80;
+         server_name localhost;
+         index index.htm index.html index.php;
+         root /usr/local/nginx/html;
+         location ~ .*\.(php|php5)?$ {
+                           root           html;
+                           fastcgi_pass   127.0.0.1:9000;
+                           fastcgi_index  index.php;
+                           fastcgi_param  SCRIPT_FILENAME /usr/local/nginx/html$fastcgi_script_name;
+                           #include        fastcgi_params;
+                           include           fastcgi.conf;
+                                    }
+     location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$
+     {
+          expires     30d;
+     }
+     location ~ .*\.(js|css)?$
+     {
+          expires     1h;
+     }
+    
+        access_log  /usr/local/nginx/logs/www.access.log;
+        }     
+include /usr/local/nginx/vhost/*.conf;
+}
+END
+cat > /usr/local/nginx/html/index.php <<END
+<?php
+phpinfo();
+?>
+END
+}
