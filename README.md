@@ -33,4 +33,4 @@ shell + dialog
     7.2）备份数据库（如：导入mysql、备份mysql）
     
 如何使用？
-# bash main.sh
+\# bash main.sh
