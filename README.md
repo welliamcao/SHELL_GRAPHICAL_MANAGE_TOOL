@@ -1,7 +1,7 @@
 SHELL_GRAPHICAL_MANAGE_TOOL
 ===========================
-shell + dialog
-如题这一个用dialog+shell的图形化管理工具（CENTOS）。
+  development tool: shell + dialog
+  如题这一个用dialog+shell的图形化管理工具（CENTOS）。
 ###大致有以下几个功能：
 		1）生成主机报告信息		
 			1.1）主机软件信息（如：主机名、系统版本、内核版本、系统负荷）		
