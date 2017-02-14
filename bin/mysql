@@ -5,8 +5,8 @@ mkdir -p /usr/local/mysql
 mkdir -p /usr/local/mysql/data
 groupadd mysql >/dev/null 2>&1
 useradd -r -g mysql mysql >/dev/null 2>&1
-tar -zxv -f mysql-5.5.29.tar.gz   >/dev/null 2>&1
-cd mysql-5.5.29
+tar -zxv -f mysql-5.5.53.tar.gz   >/dev/null 2>&1
+cd mysql-5.5.53
 yum install -y cmake >/dev/null 2>&1
 cmake \
 -DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
