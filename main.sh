@@ -704,7 +704,7 @@ done | dialog --clear --backtitle "${backtitle}" --title " Waiting for install I
 inst_lnmp_source_download
 dialog --backtitle "${backtitle}" --title "${title}"  --checklist "Which do you want install,make your choice?" 20 60 3 \
 mysql   "install mysql-5.5.29" 1 \
-php     "install php-5.3.28." 2 \
+php     "install php-5.6.9." 2 \
 nginx   "install nginx-1.4.7." 3  2>"${INSTALLINPUT}"
 local lnmp_rs=($(echo $(<"${INSTALLINPUT}")| sed -ne 's/\"//gp' ))
 for rs in ${lnmp_rs[@]}
