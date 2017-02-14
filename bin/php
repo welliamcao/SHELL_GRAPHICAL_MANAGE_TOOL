@@ -1,16 +1,16 @@
 #!/bin/bash
 inst_lnmp_php(){
 cd ${source_dir}
-tar -jxvf php-5.3.28.tar.bz2 >/dev/null 2>&1
-cd php-5.3.28
+tar -jxvf php-5.6.9.tar.bz2 >/dev/null 2>&1
+cd php-5.6.9
 if [[ $( getconf LONG_BIT) -eq 64 ]]
   then
      ln -s /usr/local/mysql/lib/libmysqlclient.so.18 /usr/lib64/ >/dev/null 2>&1
   else
      ln -s /usr/local/mysql/lib/libmysqlclient.so.18 /usr/lib/  >/dev/null 2>&1
 fi
-./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-mysql=/usr/local/mysql --with-mysqli=/usr/local/mysql/bin/mysql_config --with-iconv-dir=/usr/local --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization --with-curl=/usr/local --without-curlwrappers --enable-mbregex --enable-fpm --enable-mbstring --with-mcrypt --with-gd --enable-gd-native-ttf --with-openssl --with-mhash --enable-pcntl --enable-sockets  --with-xmlrpc --enable-zip --enable-soap  --without-pear --enable-zip --with-bz3 --enable-calendar --enable-ftp --enable-ctype --enable-exif --disable-ipv6 --with-sqlite3 --disable-pdo --disable-phar >/dev/null 2>&1 
-make ZEND_EXTRA_LIBS='-liconv' >/dev/null 2>&1  
+./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-mysql=/usr/local/mysql --with-mysqli=/usr/local/mysql/bin/mysql_config --with-iconv-dir=/usr/local --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization --with-curl=/usr/local  --enable-mbregex --enable-fpm --enable-mbstring --with-mcrypt --with-gd --enable-gd-native-ttf --with-openssl --with-mhash --enable-pcntl --enable-sockets  --with-xmlrpc --enable-zip --enable-soap  --without-pear --enable-zip  --enable-calendar --enable-ftp --enable-ctype --enable-exif --disable-ipv6 --with-sqlite3 --disable-pdo --disable-phar >/dev/null 2>&1 
+CPU_NUM=$(cat /proc/cpuinfo | grep processor | wc -l);if [ $CPU_NUM -gt 1 ];then make ZEND_EXTRA_LIBS='-liconv' -j$CPU_NUM ;else  make ZEND_EXTRA_LIBS='-liconv';fi >/dev/null 2>&1  
 make install >/dev/null 2>&1
 cp -raf  php.ini-production  /usr/local/php/etc/php.ini >/dev/null 2>&1
 cp -raf  sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm >/dev/null 2>&1

@@ -666,7 +666,7 @@ then
     mkdir -p ${source_dir}
 fi
 cd ${source_dir}
-for s in {http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.13.1.tar.gz,http://downloads.sourceforge.net/mcrypt/libmcrypt-2.5.8.tar.gz,http://nchc.dl.sourceforge.net/project/mhash/mhash/0.9.9.9/mhash-0.9.9.9.tar.gz,http://pkgs.fedoraproject.org/repo/pkgs/mcrypt/mcrypt-2.6.8.tar.gz/97639f8821b10f80943fa17da302607e/mcrypt-2.6.8.tar.gz,http://mirrors.sohu.com/mysql/MySQL-5.5/mysql-5.5.53.tar.gz,http://mirrors.sohu.com/php/php-5.3.28.tar.bz2,http://nginx.org/download/nginx-1.4.7.tar.gz,http://ftp.cs.stanford.edu/pub/exim/pcre/pcre-8.33.tar.gz}
+for s in {http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.13.1.tar.gz,http://downloads.sourceforge.net/mcrypt/libmcrypt-2.5.8.tar.gz,http://nchc.dl.sourceforge.net/project/mhash/mhash/0.9.9.9/mhash-0.9.9.9.tar.gz,http://pkgs.fedoraproject.org/repo/pkgs/mcrypt/mcrypt-2.6.8.tar.gz/97639f8821b10f80943fa17da302607e/mcrypt-2.6.8.tar.gz,http://mirrors.sohu.com/mysql/MySQL-5.5/mysql-5.5.53.tar.gz,wget http://mirrors.sohu.com/php/php-5.6.9.tar.gz,http://nginx.org/download/nginx-1.4.7.tar.gz,http://ftp.cs.stanford.edu/pub/exim/pcre/pcre-8.33.tar.gz}
    do
       if [[ ! -f ${s##*/} ]];then
           sleep 1
@@ -717,7 +717,7 @@ for rs in ${lnmp_rs[@]}
        then
          dialog --clear --backtitle "${backtitle}" --title "${title}" --msgbox "Begin install ${rs}!" 10 50
          inst_lnmp_source_libiconv
-	 inst_lnmp_source_libmcrypt
+	     inst_lnmp_source_libmcrypt
          inst_lnmp_source_mhash
          inst_lnmp_php
      elif [[ ! -d /usr/local/${rs} ]] && [[ ${rs} == 'nginx' ]]
